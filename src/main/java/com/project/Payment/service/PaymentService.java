@@ -15,16 +15,21 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    private final Random random = new Random();
 
     public PaymentResponse processPayment(PaymentRequest request) {
+        String[] modes = {"CASH","UPI","CARD"};
+        String mode = modes[random.nextInt(modes.length)];
+
         Payment payment = new Payment();
         payment.setOrderId(request.getOrderId());
-        payment.setPaymentMode(request.getPaymentMode());
+//        payment.setPaymentMode(request.getPaymentMode());
         payment.setAmount(request.getAmount());
 
         // Simulate payment logic
         boolean success = new Random().nextBoolean();
         payment.setStatus(success ? "SUCCESS" : "FAILED");
+        payment.setPaymentMode(mode);
 
         Payment savedPayment = paymentRepository.save(payment);
 
